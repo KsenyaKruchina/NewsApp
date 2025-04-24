@@ -1,7 +1,9 @@
 import { Stack } from 'expo-router';
+import { FavoritesProvider } from './context/FavoritesContex';
 
 export default function RootLayout() {
   return (
+    <FavoritesProvider>
     <Stack>
       <Stack.Screen name="(tabs)" options={{ headerShown: false}} />
       <Stack.Screen
@@ -13,5 +15,6 @@ export default function RootLayout() {
         }}
       />
     </Stack>
+    </FavoritesProvider>
   );
 }

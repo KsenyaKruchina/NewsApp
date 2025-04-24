@@ -1,20 +1,27 @@
-import { View, Text, ScrollView, StyleSheet, Image, Linking } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, Linking, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-
-interface NewsItem {
-  urlToImage?: string;
-  title: string;
-  source?: { name: string };
-  publishedAt: string;
-  description?: string;
-  content?: string;
-  author?: string;
-  url?: string;
-}
+import { Ionicons } from '@expo/vector-icons';
+import { useFavorites } from '../context/FavoritesContex';
 
 export default function NewsDetails() {
   const { newsItem } = useLocalSearchParams();
-  const item = typeof newsItem === 'string' ? JSON.parse(newsItem) : newsItem as NewsItem;
+  const item = typeof newsItem === 'string' ? JSON.parse(newsItem) : newsItem;
+  const { addFavorite, removeFavorite, isFavorite } = useFavorites();
+  const favorite = isFavorite(item.id);
+
+  const toggleFavorite = () => {
+    if (favorite) {
+      removeFavorite(item.id);
+    } else {
+      addFavorite({
+        id: item.id,
+        title: item.title,
+        urlToImage: item.urlToImage,
+        publishedAt: item.publishedAt,
+        source: item.source
+      });
+    }
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -22,6 +29,13 @@ export default function NewsDetails() {
         source={{ uri: item.urlToImage || 'https://via.placeholder.com/150' }}
         style={styles.image}
       />
+      <TouchableOpacity onPress={toggleFavorite} style={styles.favoriteButton}>
+        <Ionicons 
+          name={favorite ? 'heart' : 'heart-outline'} 
+          size={32} 
+          color={favorite ? 'red' : '#fff'} 
+        />
+      </TouchableOpacity>
       <View style={styles.content}>
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.source}>
@@ -39,7 +53,6 @@ export default function NewsDetails() {
     </ScrollView>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -87,5 +100,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#1e90ff',
     marginTop: 16,
+  },
+  favoriteButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderRadius: 20,
+    padding: 8,
   },
 });

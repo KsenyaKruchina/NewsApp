@@ -12,11 +12,11 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-      name="explore"
-      options={{
-        title: 'Поиск',
-        tabBarIcon: ({ color }) => <Ionicons name="search" size={24} color={color} />
-      }}  
+        name="favorites"
+        options={{
+          title: 'Избранное',
+          tabBarIcon: ({ color }) => <Ionicons name="heart" size={24} color={color} />
+        }}
       />
     </Tabs>
   );

@@ -1,6 +1,25 @@
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useFavorites } from '../context/FavoritesContex';
 
 export default function NewsItem({ item }) {
+  const { addFavorite, removeFavorite, isFavorite } = useFavorites();
+  const favorite = isFavorite(item.id);
+
+  const toggleFavorite = () => {
+    if (favorite) {
+      removeFavorite(item.id);
+    } else {
+      addFavorite({
+        id: item.id,
+        title: item.title,
+        urlToImage: item.urlToImage,
+        publishedAt: item.publishedAt,
+        source: item.source
+      });
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Image
@@ -12,6 +31,13 @@ export default function NewsItem({ item }) {
         <Text style={styles.source}>{item.source?.name || 'Unknown'} • {new Date(item.publishedAt).toLocaleDateString()}</Text>
         <Text style={styles.description} numberOfLines={2}>{item.description}</Text>
       </View>
+      <TouchableOpacity onPress={toggleFavorite} style={styles.favoriteButton}>
+        <Ionicons 
+          name={favorite ? 'heart' : 'heart-outline'} 
+          size={24} 
+          color={favorite ? 'red' : '#ccc'} 
+        />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -30,15 +56,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+    flexDirection: 'row',
+    position: 'relative',
   },
   image: {
-    width: '100%',
-    height: 180,
+    width: 100,
+    height: 100,
     borderRadius: 4,
-    marginBottom: 12,
+    marginRight: 12,
   },
   textContainer: {
-    paddingHorizontal: 4,
+    flex: 1,
+    paddingRight: 24,
   },
   title: {
     fontSize: 16,
@@ -54,5 +83,10 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 14,
     color: '#555',
+  },
+  favoriteButton: {
+    position: 'absolute',
+    top: 16,
+    right: 16,
   },
 });
