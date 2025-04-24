@@ -21,21 +21,44 @@ export default function NewsItem({ item }) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="news-item">
       <Image
+        testID="news-image"
         source={{ uri: item.urlToImage || 'https://via.placeholder.com/150' }}
         style={styles.image}
       />
       <View style={styles.textContainer}>
-        <Text style={styles.title} numberOfLines={2}>{item.title}</Text>
-        <Text style={styles.source}>{item.source?.name || 'Unknown'} • {new Date(item.publishedAt).toLocaleDateString()}</Text>
-        <Text style={styles.description} numberOfLines={2}>{item.description}</Text>
+        <Text 
+          testID="news-title"
+          style={styles.title} 
+          numberOfLines={2}
+        >
+          {item.title}
+        </Text>
+        <Text 
+          testID="news-source"
+          style={styles.source}
+        >
+          {item.source?.name || 'Unknown'} • {new Date(item.publishedAt).toLocaleDateString()}
+        </Text>
+        <Text 
+          testID="news-description"
+          style={styles.description} 
+          numberOfLines={2}
+        >
+          {item.description}
+        </Text>
       </View>
-      <TouchableOpacity onPress={toggleFavorite} style={styles.favoriteButton}>
+      <TouchableOpacity 
+        testID="favorite-button"
+        onPress={toggleFavorite} 
+        style={styles.favoriteButton}
+      >
         <Ionicons 
           name={favorite ? 'heart' : 'heart-outline'} 
           size={24} 
           color={favorite ? 'red' : '#ccc'} 
+          testID="heart-icon"
         />
       </TouchableOpacity>
     </View>
