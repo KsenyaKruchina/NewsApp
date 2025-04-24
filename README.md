@@ -53,3 +53,10 @@ Join our community of developers creating universal apps.
 ## API
 - **NewsApi**: [https://newsapi.org/](https://newsapi.org/)
 - **Пример запроса**: `GET /top-headlines?country=us`
+
+## Навигация 
+- Главный экран- `index.tsx`
+- Если нажимаешь на новость , то перенаправляет на страницу деталей новости `details.tsx`
+- Все параметры новости передаются через навигацию
+- Поддерживаются кликабельность ссылок
+

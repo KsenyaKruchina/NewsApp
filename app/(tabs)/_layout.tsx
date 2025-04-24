@@ -1,61 +1,23 @@
-import { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
-import { fetchNews } from '../api/newsApi';
-import NewsItem from '../components/NewsItem';
+import { Tabs } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
-export default function NewsScreen() {
-  const [news, setNews] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const loadNews = async () => {
-      try {
-        const data = await fetchNews();
-        setNews(data);
-      } catch (err) {
-        setError('Не удалось загрузить новости');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadNews();
-  }, []);
-
-  if (loading) {
-    return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles.center}>
-        <Text style={styles.error}>{error}</Text>
-      </View>
-    );
-  }
-
+export default function TabLayout() {
   return (
-    <FlatList
-      data={news}
-      keyExtractor={(item) => item.title || String(item.id)}
-      renderItem={({ item }) => <NewsItem item={item} />}
-    />
+    <Tabs screenOptions={{ tabBarActiveTintColor: '#1e90ff' }}>
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: 'Новости',
+          tabBarIcon: ({ color }) => <Ionicons name="newspaper" size={24} color={color} />
+        }}
+      />
+      <Tabs.Screen
+      name="explore"
+      options={{
+        title: 'Поиск',
+        tabBarIcon: ({ color }) => <Ionicons name="search" size={24} color={color} />
+      }}  
+      />
+    </Tabs>
   );
 }
-
-const styles = StyleSheet.create({
-  center: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  error: {
-    color: 'red',
-    fontSize: 16,
-  },
-});
